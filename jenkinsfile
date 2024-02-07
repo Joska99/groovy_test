@@ -6,7 +6,7 @@ node('agent1') {
     stage('Multy-branch') {
         if (env.BRANCH_NAME == 'main') {
             echo 'main trigger-11'
-            sh "echo ${env.BRANCH_NAME}"
+            sh "echo $BRANCH_NAME"
         } else {
             echo 'other branch'
             sh "echo ${env.BRANCH_NAME}"
