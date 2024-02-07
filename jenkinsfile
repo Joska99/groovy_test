@@ -11,7 +11,7 @@ node('agent1') {
             }
         } else {
             stage('dev-Docker-build') {
-                def myEnv = docker.build 'test:1'
+                def myEnv = docker.build('test:1')
                 docker images
                 echo myEnv
             }
