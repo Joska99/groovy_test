@@ -9,7 +9,8 @@ node('agent1') {
             sh "echo $BRANCH_NAME"
         } else {
             echo 'other branch'
-            sh "echo $BRANCH_NAME"
+            sh 'env'
+            sh "echo $env.BRANCH_NAME"
         }
     }
 }
