@@ -4,12 +4,14 @@ node('agent1') {
         sh 'env'
     }
     stage('split-nu') {
-        if (env.BRANCH_NAME == 'main') {
             stage('main') {
+        when {
+            branch 'main'
+        }
                 echo 'main trigger'
                 echo "$env.BRANCH_NAME"
             }
-        } else {
+
             stage('dev-Docker-build') {
                 git branch: "$env.BRANCH_NAME", 
                     url:  'https://github.com/Joska99/groovy_test.git'
@@ -24,5 +26,4 @@ node('agent1') {
             }
         }
     }
-}
 
