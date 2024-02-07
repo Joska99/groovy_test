@@ -3,7 +3,7 @@ node('agent1') {
         sh 'ls -lah'
         sh 'env'
     }
-    stage('split') {
+    stage('split-nu') {
         if (env.BRANCH_NAME == 'main') {
             stage('main') {
                 echo 'main trigger'
