@@ -1,5 +1,5 @@
 node('agent1') {
-    stage('Multy-branch') {
+    stage('Multy-branch-test') {
         sh 'ls -lah'
         sh 'env'
     }
