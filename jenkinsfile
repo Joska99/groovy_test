@@ -7,7 +7,7 @@ node('agent1') {
         def branchName = env.GIT_BRANCH ?: 'Unknown'
         if (branchName == 'main') {
             echo 'main trigger-11'
-            echo $branchName
+            echo "$branchName"
         } else {
             echo 'other branch'
             echo $branchName
