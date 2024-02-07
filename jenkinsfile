@@ -1,7 +1,7 @@
 node('agent1') {
     stage('test') {
         sh 'ls -lah'
-        sh 'echo env.BRANCH_NAME' 
+        sh "echo ${env.BRANCH_NAME}"
     }
     stage('Multy branch') {
         if (env.BRANCH_NAME == 'main') {
