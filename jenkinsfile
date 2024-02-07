@@ -1,4 +1,8 @@
 node('agent1') {
+    stage('nuu') {
+        sh 'ls -lah'
+        sh "echo ${env.BRANCH_NAME}"
+    }
     stage('test') {
         sh 'ls -lah'
         sh "echo ${env.BRANCH_NAME}"
