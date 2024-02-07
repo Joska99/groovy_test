@@ -1,16 +1,18 @@
+environment {
+    BRANCH_NAME = env.BRANCH_NAME
+}
+
 node('agent1') {
     stage('test-1') {
         sh 'ls -lah'
+        sh 'env'
         sh "echo ${env.BRANCH_NAME}"
     }
     stage('Multy-branch') {
         if (env.BRANCH_NAME == 'main') {
             echo 'main trigger-11'
-            sh "echo $BRANCH_NAME"
         } else {
             echo 'other branch'
-            sh 'env'
-            sh "echo $env.BRANCH_NAME"
         }
     }
 }
