@@ -1,5 +1,5 @@
 node('agent1') {
-    stage('test1') {
+    stage('test-1') {
         sh 'ls -lah'
         sh "echo ${env.BRANCH_NAME}"
     }
