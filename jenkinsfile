@@ -18,10 +18,6 @@ node('agent1') {
             echo 'other branch'
             echo "$env.BRANCH_NAME"
         }
-        stage('dev') {
-            echo 'other branch'
-            echo "$env.BRANCH_NAME"
-        }
     }
 }
 
