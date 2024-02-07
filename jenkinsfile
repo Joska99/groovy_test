@@ -11,8 +11,9 @@ node('agent1') {
             }
         } else {
             stage('dev-Docker-build') {
-                def myEnv = docker.build 'my-environment:snapshot'
-                docker ps
+                def myEnv = docker.build 'test:1'
+                docker images
+                echo myEnv
             }
             stage('dev-Docker-build') {
                 echo 'other branch'
