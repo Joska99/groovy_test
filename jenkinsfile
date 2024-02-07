@@ -1,11 +1,5 @@
-pipeline {
-    agent any
+stage 'First Groovy'
 
-    stages {
-        stage('Hello') {
-            steps {
-                echo 'Hello World2'
-            }
-        }
-    }
+node('agent1') {
+    sh "Hello"
 }
