@@ -1,9 +1,9 @@
 node('agent1') {
-    stage('test') {
+    stage('Multy-branch-test') {
         sh 'ls -lah'
         sh 'env'
     }
-    stage('Multy-branch') {
+    stage('split-nu') {
         if (env.BRANCH_NAME == 'main') {
             stage('main') {
                 echo 'main trigger'
@@ -11,14 +11,13 @@ node('agent1') {
             }
         } else {
             stage('dev-Docker-build') {
-                def myEnv = docker.build 'my-environment:snapshot'
-                docker ps
+                git branch: "$env.BRANCH_NAME", url:  'https://github.com/Joska99/groovy_test.git'
+                def myEnv = docker.build('test:1')
+                echo "$myEnv"
+                docker images
+                sh 'ls -lah'
             }
             stage('dev-Docker-build') {
-                echo 'other branch'
-                echo "$env.BRANCH_NAME"
-            }
-            stage('dev') {
                 echo 'other branch'
                 echo "$env.BRANCH_NAME"
             }
