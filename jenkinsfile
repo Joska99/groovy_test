@@ -1,6 +1,13 @@
-stage 'First Groovy'
-
 node('agent1') {
-    git url: 'https://github.com/Joska99/groovy_test'
-    sh "ls -lah"
+    stage('test') {
+        sh 'ls -lah'
+    }
+    stage('Multy branch') {
+        if (env.BRANCH_NAME == 'main') {
+            echo 'main trigger'
+        } else {
+            echo 'other'
+        }
+    }
 }
+
