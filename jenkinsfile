@@ -5,7 +5,7 @@ node('agent1') {
     }
     stage('Multy-branch') {
         def branchName = env.GIT_BRANCH ?: 'Unknown'
-        if (branchName == 'main') {
+        if (branchName == 'origin/main') {
             echo 'main trigger-11'
             echo "$branchName"
         } else {
