@@ -5,8 +5,10 @@ node('agent1') {
     }
     stage('Multy-branch') {
         if (env.BRANCH_NAME == 'main') {
-            echo 'main trigger-11'
-            echo "$env.BRANCH_NAME"
+            stage('name') {
+                echo 'main trigger'
+                echo "$env.BRANCH_NAME"
+            }
         } else {
             echo 'other branch'
             echo "$env.BRANCH_NAME"
