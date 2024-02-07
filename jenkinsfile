@@ -5,7 +5,7 @@ node('agent1') {
     }
     stage('split-nu') {
         if (env.BRANCH_NAME == 'main') {
-            stage('main') {
+            stage('main-test') {
                 echo 'main trigger'
                 echo "$env.BRANCH_NAME"
             }
