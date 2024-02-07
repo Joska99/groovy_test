@@ -1,5 +1,6 @@
 stage 'First Groovy'
 
 node('agent1') {
-    sh "Hello"
+    git url: 'https://github.com/Joska99/groovy_test'
+    sh "ls -lah"
 }
