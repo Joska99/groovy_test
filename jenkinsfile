@@ -13,6 +13,7 @@ node('agent1') {
             stage('dev-Docker-build') {
                 git branch: "$env.BRANCH_NAME", url:  'https://github.com/Joska99/groovy_test.git'
                 def myEnv = docker.build('test:1')
+                echo "$myEnv"
                 docker images
                 sh 'ls -lah'
             }
