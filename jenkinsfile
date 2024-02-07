@@ -3,7 +3,7 @@ node('agent1') {
         sh 'ls -lah'
         sh "echo ${env.BRANCH_NAME}"
     }
-    stage('Multy branch') {
+    stage('Multy-branch') {
         if (env.BRANCH_NAME == 'main') {
             echo 'main trigger'
         } else {
