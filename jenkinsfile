@@ -9,9 +9,10 @@ node('agent1') {
 
         if (branchName == 'main') {
             echo 'main trigger-11'
-            echo $branch
+            echo $branchName
         } else {
             echo 'other branch'
+            echo $branchName
         }
     }
 }
