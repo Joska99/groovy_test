@@ -48,9 +48,10 @@ def user():
     data_json = {
         'city': city_input,
     }
-    with open('history.json', 'a') as f:
-        json.dump(data_json, f)
-        f.write('\n')
+    # TODO: UNCOMENT
+    # with open('history.json', 'a') as f:
+    #     json.dump(data_json, f)
+    #     f.write('\n')
 
     return render_template('city.html',  city=city_input, title=city_input, list=list_days, back="/")
 
@@ -68,8 +69,10 @@ def history():
         History page
     """
     data = ''
-    with open('history.json', 'r') as f:
-        data = f.readlines()
+    # TODO: UNCOMENT
+    # TODO: ADD DOWNLOAD FILE
+    # with open('history.json', 'r') as f:
+    #     data = f.readlines()
 
     return render_template("history.html",  title="history-page", back="/", json=data)
 

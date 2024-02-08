@@ -11,23 +11,24 @@ deployment:
   max_surge: 1
   max_unavailable: 1
   # Container
-  container_image: joska99/weather-app:eks
+  container_image: joska99/weather-app:eks-no
   container_port: 5000
   request_cpu: 200m
   limit_memory: "128Mi"
   limit_cpu: "500m"
   # Deployment configs
   pull_policy: Always
+  cm_name: cm-green 
   # deployment_secret: ecr
 
 # Service
 service:
   name: app-service
-  type: ClusterIP
+  type: NodePort
   selector: nodejs-app
   port: 5000
-  # targetPort: 5000
-  # nodePort: 32000
+  targetPort: 5000
+  nodePort: 32000
 
 cm:
   name: cm

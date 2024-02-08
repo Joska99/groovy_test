@@ -30,7 +30,7 @@ spec:
           # ENV FROM CM
           envFrom:
             - configMapRef:
-                name: {{ .Values.cm.name }}
+                name: {{ .Values.deployment.cm_name }}
           # Define resources limits for container
           resources:
             # Scrap metrics

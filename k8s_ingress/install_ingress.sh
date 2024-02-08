@@ -18,3 +18,8 @@ kubectl create namespace ingress-nginx
 kubectl apply -f ./ingress_set_up/nginx_ingress.${APP_VERSION}.yaml
 
 kubectl get all -n ingress-nginx
+
+
+#!  try 
+helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+helm install incubator/aws-alb-ingress-controller --set autoDiscoverAwsRegion=true --set autoDiscoverAwsVpcID=true --set clusterName=MyClusterName

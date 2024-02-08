@@ -22,6 +22,8 @@ deployment:
 # Service
 service:
   name: soli-service
-  type: ClusterIP
+  type: NodePort
   selector: soli-app
   port: 80
+  targetPort: 80
+  nodePort: 32001
