@@ -1,0 +1,27 @@
+# Deployment
+deployment:
+  name: soli-app-deploy
+  namespace: default
+  # RS
+  replicas: 1
+  match_labels: soli-app
+  pod_label: soli-app
+  # Deploy strategy
+  strategy_type: RollingUpdate
+  max_surge: 1
+  max_unavailable: 1
+  # Container
+  container_image: chimenesjr/solitaire:nginx
+  container_port: 80
+  request_cpu: 200m
+  limit_memory: "128Mi"
+  limit_cpu: "500m"
+  # Deployment configs
+  pull_policy: Always
+
+# Service
+service:
+  name: soli-service
+  type: ClusterIP
+  selector: soli-app
+  port: 80
