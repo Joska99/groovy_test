@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  namespace: {{ .Values.deployment.namespace }}
+# Define ReplicaSet
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  # Deployment strategy "rolling update"
+  strategy:
+    type: {{ .Values.deployment.strategy_type }}
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.max_surge }}
+      maxUnavailable: {{ .Values.deployment.max_unavailable }}
+  # Match Pods with this label
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.match_labels }}
+  # Define Pod template for ReplicaSet
+  template:
+    metadata:
+      # Label to match to ReplicaSet
+      labels:
+        app: {{ .Values.deployment.pod_label }}
+    # Define Container in Pod
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.deployment.container_image }}
+          # Define resources limits for container
+          resources:
+            # Scrap metrics
+            requests:
+              cpu: {{ .Values.deployment.request_cpu }}
+            limits:
+              memory: {{ .Values.deployment.limit_memory }}
+              cpu: {{ .Values.deployment.limit_cpu }}
+          ports:
+            - containerPort: {{ .Values.deployment.container_port }}
+      # To pull Always
+      imagePullPolicy: {{ .Values.deployment.pull_policy }}
