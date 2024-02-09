@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.soliDeployment.name }}
+  namespace: {{ .Values.soliDeployment.namespace }}
+# Define ReplicaSet
+spec:
+  replicas: {{ .Values.soliDeployment.replicas }}
+  # Deployment strategy "rolling update"
+  strategy:
+    type: {{ .Values.soliDeployment.strategy_type }}
+    rollingUpdate:
+      maxSurge: {{ .Values.soliDeployment.max_surge }}
+      maxUnavailable: {{ .Values.soliDeployment.max_unavailable }}
+  # Match Pods with this label
+  selector:
+    matchLabels:
+      app: {{ .Values.soliDeployment.match_labels }}
+  # Define Pod template for ReplicaSet
+  template:
+    metadata:
+      # Label to match to ReplicaSet
+      labels:
+        app: {{ .Values.soliDeployment.pod_label }}
+    # Define Container in Pod
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.soliDeployment.container_image }}
+          # Define resources limits for container
+          resources:
+            # Scrap metrics
+            requests:
+              cpu: {{ .Values.soliDeployment.request_cpu }}
+            limits:
+              memory: {{ .Values.soliDeployment.limit_memory }}
+              cpu: {{ .Values.soliDeployment.limit_cpu }}
+          ports:
+            - containerPort: {{ .Values.soliDeployment.container_port }}
+      # To pull Always
+      imagePullPolicy: {{ .Values.soliDeployment.pull_policy }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.soliService.name }}
+  namespace: {{ .Values.soliService.namespace }}
+spec:
+  type: {{ .Values.soliService.type }}
+  selector:
+    app: {{ .Values.soliService.selector }}
+  ports:
+    - port: {{ .Values.soliService.port }}
+      targetPort: {{ .Values.soliService.targetPort }}
+      nodePort: {{ .Values.soliService.nodePort }}

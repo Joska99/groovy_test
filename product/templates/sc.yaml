@@ -1,0 +1,9 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: {{ .Values.sc.name }}
+provisioner: {{ .Values.sc.provisioner }}
+parameters:
+  provisioningMode: {{ .Values.sc.param_mode }}
+  fileSystemId: {{ .Values.sc.param_fs_id }}
+  directoryPerms: "777"
