@@ -29,11 +29,15 @@ spec:
           image: {{ .Values.deployment.container_image }}
           ports:
             - containerPort: {{ .Values.deployment.container_port }}
+
           # TODO add PVC
           # JSON file to write from SC
-          # volumeMounts:
-          #   - name: persistent-storage
-          #     mountPath: /weather-app/efs/history.json
+          volumeMounts:
+            - name: persistent-storage
+              mountPath: /weather-app/efs/history.json
+              subPath: history.json
+          # [ ] #############################
+
           # ENV FROM CM
           envFrom:
             - configMapRef:
@@ -50,15 +54,18 @@ spec:
       imagePullPolicy: {{ .Values.deployment.pull_policy }}
 
 # TODO create Volume for pvc
-  # volumes:
-  #   - name: persistent-storage
-  #     persistentVolumeClaim:
-  #       claimName: efs-claim-1
+  volumes:
+    - name: persistent-storage
+      persistentVolumeClaim:
+        claimName: efs-claim-1
+# [ ] #############################
 
 # TODO create Private ECR
       # Secret to pull from ECR
       # imagePullSecrets:
         # - name: {{ .Values.deployment.deployment_secret }}
+# [ ] #############################
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
