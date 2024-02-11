@@ -54,10 +54,10 @@ spec:
       imagePullPolicy: {{ .Values.deployment.pull_policy }}
 
 # TODO create Volume for pvc
-  volumes:
-    - name: persistent-storage
-      persistentVolumeClaim:
-        claimName: efs-claim-1
+      volumes:
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: efs-claim-1
 # [ ] #############################
 
 # TODO create Private ECR
