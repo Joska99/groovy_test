@@ -14,4 +14,4 @@ spec:
   volumes:
     - name: persistent-storage
       persistentVolumeClaim:
-        claimName: efs-claim
+        claimName: efs-claim-1
