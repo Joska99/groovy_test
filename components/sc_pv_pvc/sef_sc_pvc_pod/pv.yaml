@@ -7,7 +7,7 @@ spec:
     storage: 20Gi
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-06063eda3cd63d13c:/efs
+    volumeHandle: fs-06063eda3cd63d13c:/
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
