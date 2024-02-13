@@ -3,7 +3,7 @@ pipeline {
         label 'agent1'
     }
     // tools {
-    //     docker '18.09'
+    //     docker 'lates'
     // }
     environment  {
         // Docker
@@ -16,10 +16,6 @@ pipeline {
         HELM_REPO = ''
     }
 
-    def printParams() {
-        env.getEnvironment().each { name, value -> println "Name: $name -> Value $value" }
-    }
-    printParams()
     stages {
         // stage('checkout code') {
         //     steps {
