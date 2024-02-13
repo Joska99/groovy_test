@@ -28,11 +28,12 @@ pipeline {
             }
             steps {
                 script {
-                    sh "echo 'there: $env'"
+                    sh 'printenv'
                     sh "echo $env.BRANCH_NAME"
                     // def newApp = docker.build "${IMG_NAME_APP}:${VERSION}"
                     // newApp.push 'latest'
-                    app = docker.build("${IMG_NAME_APP}:${VERSION}")
+                    def app = docker.build("${IMG_NAME_APP}:${VERSION}")
+                    app.push()
                     // sh 'docekr --version'
                 }
             }
