@@ -2,12 +2,12 @@ pipeline {
     agent {
         label 'agent1'
     }
-    // tools {
-    //     docker 'lates'
-    // }
+    tools {
+        docker '17.09.1-ce'
+    }
     environment  {
         // Docker
-        DOCKER_CRET_PATH = ""
+        // DOCKER_CRET_PATH = ""
         IMG_NAME_APP = 'weather-app'
         VERSION = 'jenkins'
         // Helm
