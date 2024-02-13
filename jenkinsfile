@@ -32,8 +32,8 @@ pipeline {
                     sh "echo $env.BRANCH_NAME"
                     // def newApp = docker.build "${IMG_NAME_APP}:${VERSION}"
                     // newApp.push 'latest'
-                    docker.build("${IMG_NAME_APP}:${VERSION}")
-                    sh 'docekr images'
+                    // docker.build("${IMG_NAME_APP}:${VERSION}")
+                    sh 'docekr --version'
                 }
             }
         }
