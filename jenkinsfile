@@ -4,10 +4,10 @@ pipeline {
     }
     tools {
         dockerTool 'docker'
+        dockerTool 'helm'
     }
     environment  {
         // Docker
-        // DOCKER_CRET_PATH = ""
         IMG_NAME_APP = 'weather-app'
         VERSION = 'jenkins'
         // Helm
@@ -33,6 +33,7 @@ pipeline {
                     //! Using Docker from Tools
                     sh 'docker build -t joska99/weather-app:jenkins ./jenkins_project/py_app/'
                     sh 'docker images'
+                    sh 'helm version'
                 }
             }
         }
