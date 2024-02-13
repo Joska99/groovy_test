@@ -2,8 +2,12 @@ pipeline {
     agent {
         label 'agent1'
     }
+    tools {
+        'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '18.09'
+    }
     environment  {
         // Docker
+        DOCKER_CRET_PATH = ""
         IMG_NAME_APP = 'weather-app'
         VERSION = 'jenkins'
         // Helm
@@ -13,11 +17,11 @@ pipeline {
     }
 
     stages {
-        stage('checkout code') {
-            steps {
-                checkout scm
-            }
-        }
+        // stage('checkout code') {
+        //     steps {
+        //         checkout scm
+        //     }
+        // }
         stage('build docker image') {
             when {
                 branch 'main'
@@ -26,6 +30,8 @@ pipeline {
                 script {
                     sh "echo $env"
                     sh "echo $env.BRANCH_NAME"
+                    // def newApp = docker.build "${IMG_NAME_APP}:${VERSION}"
+                    // newApp.push 'latest'
                     docker.build("${IMG_NAME_APP}:${VERSION}")
                     sh 'docekr images'
                 }
