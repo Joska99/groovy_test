@@ -2,7 +2,7 @@ pipeline {
     agent {
         label 'agent1'
     }
-    enviroment {
+    environment  {
         // Docker
         IMG_NAME_APP = 'weather-app'
         VERSION = 'jenkins'
@@ -13,6 +13,11 @@ pipeline {
     }
 
     stages {
+        stage('checkout code') {
+            steps {
+                checkout scm
+            }
+        }
         stage('build docker image') {
             when {
                 branch 'main'
