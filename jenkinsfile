@@ -2,9 +2,9 @@ pipeline {
     agent {
         label 'agent1'
     }
-    tools {
-        docker '18.09'
-    }
+    // tools {
+    //     docker '18.09'
+    // }
     environment  {
         // Docker
         DOCKER_CRET_PATH = ""
