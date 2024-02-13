@@ -44,12 +44,12 @@ pipeline {
     stages {
         stage('build docker image') {
             when {
-                branch 'dev'
+                branch 'main'
             }
             steps {
                 sh "echo $env.BRANCH_NAME"
                 docker.build("${IMG_NAME_APP}:${VERSION}")
-                sh "docekr images"
+                sh 'docekr images'
             }
         }
     }
