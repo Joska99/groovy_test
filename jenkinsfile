@@ -31,9 +31,9 @@ pipeline {
                     //! print all ENV in Declarative mode
                     sh 'printenv'
                     //! Using Docker from Tools
-                    sh 'docekr --version'
-                    sh 'docekr build -t joska99/weather-app:jenkins ./jenkins_project/py_app/dockerfile'
-                    sh 'docekr images'
+                    sh 'docker --version'
+                    sh 'docker build -t joska99/weather-app:jenkins ./jenkins_project/py_app/dockerfile'
+                    sh 'docker images'
                     // def dockerHome = tool 'docker'
                     // env.PATH = "${dockerHome}/bin:${env.PATH}"
                 }
