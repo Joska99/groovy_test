@@ -28,7 +28,9 @@ pipeline {
             }
             steps {
                 script {
-                    sh "echo $env"
+                    env.each { key, value ->
+                        echo "${key}: ${value}"
+                    }
                     sh "echo $env.BRANCH_NAME"
                     // def newApp = docker.build "${IMG_NAME_APP}:${VERSION}"
                     // newApp.push 'latest'
