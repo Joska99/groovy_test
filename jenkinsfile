@@ -2,9 +2,9 @@ pipeline {
     agent {
         label 'agent1'
     }
-    tools {
-        docker '17.09.1-ce'
-    }
+    // tools {
+    //     docker '17.09.1-ce'
+    // }
     environment  {
         // Docker
         // DOCKER_CRET_PATH = ""
@@ -32,6 +32,8 @@ pipeline {
                     sh 'printenv'
                     docker.build("${IMG_NAME_APP}:${env.BUILD_NUMBER}", './jenkins_project/py_app/dockerfile')
                     // sh 'docekr --version'
+                    def dockerHome = tool 'docker'
+                    env.PATH = "${dockerHome}/bin:${env.PATH}"
                 }
             }
         }
