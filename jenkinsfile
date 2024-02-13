@@ -2,9 +2,9 @@ pipeline {
     agent {
         label 'agent1'
     }
-    // tools {
-    //     docker 'lates'
-    // }
+    tools {
+        docker 'lates'
+    }
     environment  {
         // Docker
         DOCKER_CRET_PATH = ""
@@ -28,12 +28,9 @@ pipeline {
             }
             steps {
                 script {
+                    // print all ENV in Declarative mode
                     sh 'printenv'
-                    sh "echo $env.BRANCH_NAME"
-                    // def newApp = docker.build "${IMG_NAME_APP}:${VERSION}"
-                    // newApp.push 'latest'
-                    def app = docker.build("${IMG_NAME_APP}:${VERSION}")
-                    app.push()
+                    docker.build("${IMG_NAME_APP}:${env.BUILD_NUMBER}", './jenkins_project/py_app/dockerfile')
                     // sh 'docekr --version'
                 }
             }
