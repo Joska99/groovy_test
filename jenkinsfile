@@ -29,13 +29,10 @@ pipeline {
             steps {
                 script {
                     //! print all ENV in Declarative mode
-                    sh 'printenv'
+                    // sh 'printenv'
                     //! Using Docker from Tools
-                    sh 'docker --version'
-                    sh 'docker build -t joska99/weather-app:jenkins ./jenkins_project/py_app/dockerfile'
+                    sh 'docker build -t joska99/weather-app:jenkins ./jenkins_project/py_app/'
                     sh 'docker images'
-                    // def dockerHome = tool 'docker'
-                    // env.PATH = "${dockerHome}/bin:${env.PATH}"
                 }
             }
         }
