@@ -19,7 +19,7 @@ pipeline {
     def printParams() {
         env.getEnvironment().each { name, value -> println "Name: $name -> Value $value" }
     }
-printParams()
+    printParams()
     stages {
         // stage('checkout code') {
         //     steps {
@@ -32,9 +32,7 @@ printParams()
             }
             steps {
                 script {
-                    env.each { key, value ->
-                        echo "${key}: ${value}"
-                    }
+                    sh "$env"
                     sh "echo $env.BRANCH_NAME"
                     // def newApp = docker.build "${IMG_NAME_APP}:${VERSION}"
                     // newApp.push 'latest'
