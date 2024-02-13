@@ -24,6 +24,7 @@ pipeline {
             }
             steps {
                 script {
+                    sh "echo $env"
                     sh "echo $env.BRANCH_NAME"
                     docker.build("${IMG_NAME_APP}:${VERSION}")
                     sh 'docekr images'
