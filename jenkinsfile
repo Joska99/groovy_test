@@ -32,7 +32,7 @@ pipeline {
                     sh 'printenv'
                     //! Using Docker from Tools
                     docker.build("${IMG_NAME_APP}:${env.BUILD_NUMBER}", './jenkins_project/py_app/dockerfile')
-                    // sh 'docekr --version'
+                    sh 'docekr --version'
                     // def dockerHome = tool 'docker'
                     // env.PATH = "${dockerHome}/bin:${env.PATH}"
                 }
