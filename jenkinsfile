@@ -37,5 +37,16 @@ pipeline {
                 }
             }
         }
+        stage('Helm deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    //! Using Helm from DockerTols (find custom tools)
+                    sh 'helm version'
+                }
+            }
+        }
     }
 }
