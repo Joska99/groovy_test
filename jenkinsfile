@@ -1,29 +1,56 @@
-node('agent1') {
-    stage('Multy-branch-test') {
-        sh 'ls -lah'
-        sh 'env'
-    }
-    stage('split-nu') {
-            stage('main') {
-        when {
-            branch 'main'
-        }
-                echo 'main trigger'
-                echo "$env.BRANCH_NAME"
-            }
+// node('agent1') {
+//     stage('Multy-branch-test') {
+//         sh 'ls -lah'
+//         sh 'env'
+//     }
+//     stage('split-nu') {
+//             stage('main') {
+//         when {
+//             branch 'main'
+//         }
+//                 echo 'main trigger'
+//                 echo "$env.BRANCH_NAME"
+//             }
 
-            stage('dev-Docker-build') {
-                git branch: "$env.BRANCH_NAME", 
-                    url:  'https://github.com/Joska99/groovy_test.git'
-                // def myEnv = docker.build('test:1')
-                // echo "$myEnv"
-                // docker images
-                sh 'ls -lah'
+//             stage('dev-Docker-build') {
+//                 git branch: "$env.BRANCH_NAME", 
+//                     url:  'https://github.com/Joska99/groovy_test.git'
+//                 // def myEnv = docker.build('test:1')
+//                 // echo "$myEnv"
+//                 // docker images
+//                 sh 'ls -lah'
+//             }
+//             stage('dev-Docker-build') {
+//                 echo 'other branch'
+//                 echo "$env.BRANCH_NAME"
+//             }
+//         }
+//     }
+
+pipeline { 
+    agent {
+        label 'agent1'
+    }
+    enviroment{
+        // Docker
+        IMG_NAME_APP = 'weather-app'
+        VERSION = 'jenkins'
+        // Helm
+        HELM_PACKAGE_DIR = ''
+        HELM_PACKAGE = ''
+        HELM_REPO = ''
+    }
+
+    stages {
+        stage('build docker image') {
+            when {
+                branch 'dev'
             }
-            stage('dev-Docker-build') {
-                echo 'other branch'
-                echo "$env.BRANCH_NAME"
+            steps {
+                sh "echo $env.BRANCH_NAME"
+                docker.build("${IMG_NAME_APP}:${VERSION}")
+                sh "docekr images"
             }
         }
     }
-
+}
