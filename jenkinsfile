@@ -4,6 +4,7 @@ pipeline {
     }
     tools {
         dockerTool 'docker'
+        dockerTool 'k8s'
         dockerTool 'helm'
     }
     environment  {
@@ -33,7 +34,6 @@ pipeline {
                     //! Using Docker from Tools
                     sh 'docker build -t joska99/weather-app:jenkins ./jenkins_project/py_app/'
                     sh 'docker images'
-                    sh 'helm version'
                 }
             }
         }
@@ -45,6 +45,7 @@ pipeline {
                 script {
                     //! Using Helm from DockerTols (find custom tools)
                     sh 'helm version'
+                    sh 'kubectl version --client'
                 }
             }
         }
