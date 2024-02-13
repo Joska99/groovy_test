@@ -45,7 +45,7 @@ pipeline {
                 script {
                     //! Using Helm from DockerTols (find custom tools)
                     sh 'helm version'
-                    sh 'kubectl version --client'
+                    sh 'sudo kubectl version --client'
                 }
             }
         }
