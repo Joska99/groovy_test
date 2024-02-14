@@ -29,7 +29,7 @@ pipeline {
     stages {
         stage('CI - Build docker image and Push to DockerHub') {
             when {
-                branch 'dev'
+                branch 'main'
             }
             steps {
                 script {
