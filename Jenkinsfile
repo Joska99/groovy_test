@@ -40,7 +40,7 @@ pipeline {
                     minor = versionArray[1] as int
                     patch = versionArray[2] as int
                     minor++
-                    VERSION = "$major.$minor.$patch"
+                    env.VERSION = "$major.$minor.$patch"
                     //! Write updated version to file
                     sh "echo $VERSION > version.txt"
                     sh "cat version.txt"
