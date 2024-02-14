@@ -11,9 +11,8 @@ pipeline {
     environment  {
         // Docker
         IMG_NAME = 'weather-app'
-        // TODO: Get version from file
-        //* VERSION = sh(script: 'cat version.txt', returnStdout: true).trim() ?: '1.0.0'
-        VERSION = "${BUILD_NUMBER}"
+        //! Get version from file
+        VERSION = sh(script: 'cat version.txt', returnStdout: true).trim()
         DOCKER_REGESTRY = 'joska99'
         DOCKER_PATH = './jenkins_project/py_app/'
         // Helm
@@ -34,16 +33,27 @@ pipeline {
             }
             steps {
                 script {
-                    //! TRY+CATCH gets error and continues pipeline
+                    //! Increment version from local file
+                    versionArray = VERSION.tokenize('.')
+                    major = versionArray[0] as int
+                    minor = versionArray[1] as int
+                    patch = versionArray[2] as int
+                    minor++
+                    env.NEW_VERSION = "$major.$minor.$patch"
+                    //! Write updated version to file
+                    sh "echo $NEW_VERSION > version.txt"
+                }
+                script {
+                    //! TRY+CATCH gets error 
                     try {
                         //! Using Docker from Tools
                         sh '''
-                            docker build -t "$DOCKER_REGESTRY/$IMG_NAME:$VERSION" "$DOCKER_PATH"
+                            docker build -t "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION" "$DOCKER_PATH"
                         '''
                     } catch (err) {
                         echo '<--------- ERROR IN BUILD TO DOCKER IMAGE --------->'
                         slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
-                        error "Failed to build Docker image: ${err}"
+                        error "Failed to build Docker image: ${err.getMessage()}"
                     }
                 }
                 script {
@@ -57,22 +67,68 @@ pipeline {
                         try {
                             sh '''
                                 echo "$PSWD" | sudo docker login --username "$USER" --password-stdin
-                                sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
+                                sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION"
                             '''
                         } catch(err) {
                             echo '<--------- ERROR IN PUSH TO DOCKER HUB --------->'
                             slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
-                            error "Failed to push Docker image: ${err}"
+                            error "Failed to push Docker image: ${err.getMessage()}"
                         }
                     }
                 }
             }
         }
-        // TODO: Hotfix branch
-        // stage('HOTFIX_CI - Build docker image and Push to DockerHub') {
-        //     when {branch 'hotfix'}
-        //     steps {script {}}
-        // }
+        stage('HOTFIX_CI - Build docker image and Push to DockerHub') {
+            when {
+                branch 'hotfix'
+            }
+            steps {
+                script {
+                    //! Increment version from local file
+                    versionArray = VERSION.tokenize('.')
+                    major = versionArray[0] as int
+                    minor = versionArray[1] as int
+                    patch = versionArray[2] as int
+                    patch++
+                    env.NEW_VERSION = "$major.$minor.$patch"
+                    //! Write updated version to file
+                    sh "echo $NEW_VERSION > version.txt"
+                }
+                script {
+                    //! TRY+CATCH gets error and continues pipeline
+                    try {
+                        //! Using Docker from Tools
+                        sh '''
+                            docker build -t "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION" "$DOCKER_PATH"
+                        '''
+                    } catch (err) {
+                        echo '<--------- ERROR IN BUILD TO DOCKER IMAGE --------->'
+                        slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
+                        error "Failed to build Docker image: ${err.getMessage()}"
+                    }
+                }
+                script {
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: 'dockerhub-cred',
+                            usernameVariable: 'USER',
+                            passwordVariable: 'PSWD'
+                        )
+                    ]) {
+                        try {
+                            sh '''
+                                echo "$PSWD" | sudo docker login --username "$USER" --password-stdin
+                                sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION"
+                            '''
+                        } catch(err) {
+                            echo '<--------- ERROR IN PUSH TO DOCKER HUB --------->'
+                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
+                            error "Failed to push Docker image: ${err.getMessage()}"
+                        }
+                    }
+                }
+            }
+        }
         stage('CD - Helm deploy') {
             when {
                 branch 'main'
@@ -81,7 +137,7 @@ pipeline {
                 script {
                     withCredentials([
                         file(
-                            credentialsId: 'kubeconfig', 
+                            credentialsId: 'kubeconfig',
                             variable: 'KUBECONFIG'
                         )
                     ]) {
@@ -97,7 +153,7 @@ pipeline {
                         } catch(err) {
                             echo '<--------- ERROR DEPLOY HELM CHART --------->'
                             slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
-                            error "Failed to deploy Helm chart: ${err}"
+                            error "Failed to deploy Helm chart: ${err.getMessage()}"
                         }
                     }
                 }
