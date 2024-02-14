@@ -43,6 +43,10 @@ pipeline {
                     env.VERSION = "$major.$minor.$patch"
                     //! Write updated version to file
                     writeFile file: 'version.txt', text: env.VERSION
+                    sh "cat version.txt"
+                    sh "echo $major"
+                    sh "echo $minor"
+                    sh "echo $patch"
                     sh "echo VERSION_IS:$env.VERSION"
                     sh 'printenv'
                 }
