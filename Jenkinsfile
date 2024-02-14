@@ -19,6 +19,8 @@ pipeline {
         // Helm
         HELM_REPO = 'weather-app-chart'
         HELM_RELEASE = 'app'
+        // Slack
+        ERROR_MESSAGE = '#ff0000'
     }
     options {
         buildDiscarder(logRotator(numToKeepStr:'3'))
@@ -40,8 +42,8 @@ pipeline {
                         '''
                     } catch (err) {
                         echo '<--------- ERROR IN BUILD TO DOCKER IMAGE --------->'
-                        echo "Failed: ${err}"
-                        slackSend color: '#ff0000', message: "Error message: ${err}"
+                        slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
+                        error "Failed to build Docker image: ${err}"
                     }
                 }
                 script {
@@ -59,8 +61,8 @@ pipeline {
                             '''
                         } catch(err) {
                             echo '<--------- ERROR IN PUSH TO DOCKER HUB --------->'
-                            echo "Failed: ${err}"
-                            slackSend color: '#ff0000', message: "Error message: ${err}"
+                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
+                            error "Failed to push Docker image: ${err}"
                         }
                     }
                 }
@@ -96,8 +98,7 @@ pipeline {
                             '''
                         } catch(err) {
                             echo '<--------- ERROR DEPLOY HELM CHART --------->'
-                            echo "Failed: ${err}"
-                            slackSend color: '#ff0000', message: "Error message: ${err}"
+                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
                             error "Failed to deploy Helm chart: ${err}"
                         }
                     }
