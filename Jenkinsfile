@@ -66,8 +66,6 @@ pipeline {
                         }
                     }
                 }
-                // TODO: add pull request to main
-                // post { success { }}
             }
         }
         // TODO: Hotfix branch
@@ -90,11 +88,11 @@ pipeline {
                         try {
                             //! Using Helm from DockerTols (find custom tools)
                             sh '''
-                                helm upgrade $HELM_RELEASE $DOCKER_REGESTRY/$HELM_REPO \
+                                helm upgrade $HELM_RELEASE oci://docker.io/$DOCKER_REGESTRY/$HELM_REPO \
                                     --kubeconfig $KUBECONFIG \
                                     --install \
                                     --atomic \
-                                    --set value.deployment.image="$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
+                                    --set value.deployment.container_image="$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
                             '''
                         } catch(err) {
                             echo '<--------- ERROR DEPLOY HELM CHART --------->'
