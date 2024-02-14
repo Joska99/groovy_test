@@ -36,7 +36,7 @@ pipeline {
                 script {
                     //! Increment version from local file
                     sh 'ls'
-                    NEW_VERSION = VERSION
+                    env.NEW_VERSION = VERSION
                     versionArray = NEW_VERSION.tokenize('.')
                     major = versionArray[0] as int
                     minor = versionArray[1] as int
