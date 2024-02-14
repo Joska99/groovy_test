@@ -44,7 +44,7 @@ pipeline {
                     sh "echo $NEW_VERSION > version.txt"
                 }
                 script {
-                    //! TRY+CATCH gets error and continues pipeline
+                    //! TRY+CATCH gets error 
                     try {
                         //! Using Docker from Tools
                         sh '''
