@@ -50,6 +50,7 @@ pipeline {
                     ]) {
                         try {
                             sh '''
+                                echo "$PSWD"
                                 echo "$PSWD" | sudo docker login --username "$USER" --password-stdin"
                                 sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
                             '''
