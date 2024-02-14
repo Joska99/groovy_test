@@ -34,15 +34,16 @@ pipeline {
             }
             steps {
                 script {
-                    //! Increment version
+                    //! Increment version from local file
                     versionArray = env.VERSION.tokenize('.')
                     major = versionArray[0] as int
                     minor = versionArray[1] as int
                     patch = versionArray[2] as int
-                    patch++
-                    env.VERSION = "${major}.${minor}.${patch}"
+                    minor++
+                    env.VERSION = "$major.$minor.$patch"
                     //! Write updated version to file
                     writeFile file: 'version.txt', text: env.VERSION
+                    sh "echo VERSION_IS:$VERSION"
                     sh 'printenv'
                 }
                 script {
