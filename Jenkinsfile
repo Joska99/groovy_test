@@ -40,14 +40,14 @@ pipeline {
                     minor = versionArray[1] as int
                     patch = versionArray[2] as int
                     minor++
-                    env.VERSION = "$major.$minor.$patch"
+                    VERSION = "$major.$minor.$patch"
                     //! Write updated version to file
                     sh "echo $VERSION > version.txt"
                     sh "cat version.txt"
                     sh "echo $major"
                     sh "echo $minor"
                     sh "echo $patch"
-                    sh "echo VERSION_IS:$env.VERSION"
+                    sh "echo VERSION_IS:$VERSION"
                     sh 'printenv'
                 }
                 script {
@@ -98,7 +98,7 @@ pipeline {
                 script {
                     withCredentials([
                         file(
-                            credentialsId: 'kubeconfig', 
+                            credentialsId: 'kubeconfig',
                             variable: 'KUBECONFIG'
                         )
                     ]) {
