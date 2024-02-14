@@ -13,7 +13,7 @@ pipeline {
         IMG_NAME = 'weather-app'
         // TODO: Get version from file
         // VERSION = sh(script: 'cat version.txt', returnStdout: true).trim() ?: '1.0.0'
-        VERSION = 'jenkins'
+        VERSION = sh(script: "echo ${env.BUILD_NUMBER}", returnStdout: true).trim() ?: 'jenkins'
         DOCKER_REGESTRY = 'joska99'
         DOCKER_PATH = './jenkins_project/py_app/'
         // Helm
