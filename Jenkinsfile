@@ -13,7 +13,7 @@ pipeline {
         IMG_NAME = 'weather-app'
         // TODO: Get version from file
         // VERSION = sh(script: 'cat version.txt', returnStdout: true).trim() ?: '1.0.0'
-        VERSION = sh(script: 'echo $env.BUILD_NMBER', returnStdout: true)
+        VERSION = sh(script: 'echo $env.BUILD_NUMBER', returnStdout: true)
         DOCKER_REGESTRY = 'joska99'
         DOCKER_PATH = './jenkins_project/py_app/'
         // Helm
@@ -54,6 +54,7 @@ pipeline {
                     ]) {
                         try {
                             sh '''
+                                echo "$VERSION"
                                 echo "$PSWD" | sudo docker login --username "$USER" --password-stdin
                                 sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
                             '''
