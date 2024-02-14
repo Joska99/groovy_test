@@ -12,7 +12,7 @@ pipeline {
         // Docker
         IMG_NAME = 'weather-app'
         // TODO: Get version from file
-        // VERSION = sh(script: "cat version.txt", returnStdout: true).trim()
+        VERSION = sh(script: "cat version.txt", returnStdout: true).trim()
         // VERSION = "${BUILD_NUMBER}"
         DOCKER_REGESTRY = 'joska99'
         DOCKER_PATH = './jenkins_project/py_app/'
@@ -36,20 +36,20 @@ pipeline {
                 script {
                     //! Increment version from local file
                     sh 'ls'
-                    env.VERSION = sh(script: 'cat version.txt', returnStdout: true).trim()
-                    versionArray = VERSION.tokenize('.')
+                    NEW_VERSION = VERSION
+                    versionArray = NEW_VERSION.tokenize('.')
                     major = versionArray[0] as int
                     minor = versionArray[1] as int
                     patch = versionArray[2] as int
                     minor++
-                    VERSION = "$major.$minor.$patch"
+                    NEW_VERSION = "$major.$minor.$patch"
                     //! Write updated version to file
-                    sh "echo $VERSION > version.txt"
+                    sh "echo $NEW_VERSION > version.txt"
                     sh "cat version.txt"
                     sh "echo $major"
                     sh "echo $minor"
                     sh "echo $patch"
-                    sh "echo VERSION_IS:$VERSION"
+                    sh "echo VERSION_IS:$NEW_VERSION"
                     sh 'printenv'
                 }
                 script {
@@ -57,7 +57,7 @@ pipeline {
                     try {
                         //! Using Docker from Tools
                         sh '''
-                            docker build -t "$DOCKER_REGESTRY/$IMG_NAME:$VERSION" "$DOCKER_PATH"
+                            docker build -t "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION" "$DOCKER_PATH"
                         '''
                     } catch (err) {
                         echo '<--------- ERROR IN BUILD TO DOCKER IMAGE --------->'
