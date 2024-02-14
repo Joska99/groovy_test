@@ -42,7 +42,7 @@ pipeline {
                     patch++
                     env.VERSION = "${major}.${minor}.${patch}"
                     //! Write updated version to file
-                    sh "echo ${env.VERSION} > version.txt"
+                    writeFile file: 'version.txt', text: env.VERSION
                     sh 'printenv'
                 }
                 script {
