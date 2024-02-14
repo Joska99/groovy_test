@@ -54,13 +54,12 @@ pipeline {
                     ]) {
                         try {
                             sh '''
-                                echo "$PSWD" | sudo docker login --username "$USER" --password-stdin"
+                                echo "$PSWD" | sudo docker login --username "$USER" --password-stdin
                                 sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
                             '''
                         } catch(err) {
                             echo "Failed: ${err}"
                             echo 'ERROR IN PUSH TO DOCKER HUB'
-                            // TODO: notify slack with correct error
                         }
                     }
                 }
