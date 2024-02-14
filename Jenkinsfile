@@ -12,7 +12,7 @@ pipeline {
         // Docker
         IMG_NAME = 'weather-app'
         // TODO: Get version from file
-        VERSION = sh(script: 'cat version.txt', returnStdout: true).trim() ?: '1.0.0'
+        VERSION = sh(script: "cat version.txt", returnStdout: true).trim() ?: "1.0.0"
         // VERSION = "${BUILD_NUMBER}"
         DOCKER_REGESTRY = 'joska99'
         DOCKER_PATH = './jenkins_project/py_app/'
@@ -38,7 +38,7 @@ pipeline {
                     versionArray = env.VERSION.tokenize('.')
                     major = versionArray[0] as int
                     minor = versionArray[1] as int
-                    dpatch = versionArray[2] as int
+                    patch = versionArray[2] as int
                     patch++
                     env.VERSION = "${major}.${minor}.${patch}"
                     //! Write updated version to file
