@@ -78,11 +78,57 @@ pipeline {
                 }
             }
         }
-        // TODO: Hotfix branch
-        // stage('HOTFIX_CI - Build docker image and Push to DockerHub') {
-        //     when {branch 'hotfix'}
-        //     steps {script {}}
-        // }
+        stage('HOTFIX_CI - Build docker image and Push to DockerHub') {
+            when {
+                branch 'hotfix'
+            }
+            steps {
+                script {
+                    //! Increment version from local file
+                    versionArray = VERSION.tokenize('.')
+                    major = versionArray[0] as int
+                    minor = versionArray[1] as int
+                    patch = versionArray[2] as int
+                    patch++
+                    env.NEW_VERSION = "$major.$minor.$patch"
+                    //! Write updated version to file
+                    sh "echo $NEW_VERSION > version.txt"
+                }
+                script {
+                    //! TRY+CATCH gets error and continues pipeline
+                    try {
+                        //! Using Docker from Tools
+                        sh '''
+                            docker build -t "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION" "$DOCKER_PATH"
+                        '''
+                    } catch (err) {
+                        echo '<--------- ERROR IN BUILD TO DOCKER IMAGE --------->'
+                        slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
+                        error "Failed to build Docker image: ${err.getMessage()}"
+                    }
+                }
+                script {
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: 'dockerhub-cred',
+                            usernameVariable: 'USER',
+                            passwordVariable: 'PSWD'
+                        )
+                    ]) {
+                        try {
+                            sh '''
+                                echo "$PSWD" | sudo docker login --username "$USER" --password-stdin
+                                sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION"
+                            '''
+                        } catch(err) {
+                            echo '<--------- ERROR IN PUSH TO DOCKER HUB --------->'
+                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
+                            error "Failed to push Docker image: ${err.getMessage()}"
+                        }
+                    }
+                }
+            }
+        }
         stage('CD - Helm deploy') {
             when {
                 branch 'main'
