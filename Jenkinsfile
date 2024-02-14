@@ -91,7 +91,7 @@ pipeline {
                             '''
                         } catch(err) {
                             echo "Failed: ${err}"
-                            // TODO: notify slack with correct error
+                            // TODO: notify slack with correct error nuuuu
                         }
                     }
                 }
