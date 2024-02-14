@@ -66,22 +66,6 @@ pipeline {
                         }
                     }
                 }
-                // TODO: add pull request to main
-                post {
-                    success {
-                        script {
-                            def prNumber = env.CHANGE_ID
-                            def comment = "Your comment here"
-                            sh """
-                                curl -X POST \
-                                    -H 'Authorization: token YOUR_GITHUB_ACCESS_TOKEN' \
-                                    -H 'Content-Type: application/json' \
-                                    -d '{ "body": "${comment}" }' \
-                                    https://api.github.com/repos/joska99/groovy_test/issues/${prNumber}/comments
-                            """
-                        }
-                    }
-                }
             }
         }
         // TODO: Hotfix branch
