@@ -30,10 +30,6 @@ service:
   targetPort: 5000
   nodePort: 32000
 
-cm:
-  name: cm
-  BG_COLOR: blue
-
 cm2:
   name: cm-green
   BG_COLOR: green

@@ -67,7 +67,21 @@ pipeline {
                     }
                 }
                 // TODO: add pull request to main
-                // post { success { }}
+                post {
+                    success {
+                        script {
+                            def prNumber = env.CHANGE_ID
+                            def comment = "Your comment here"
+                            sh """
+                                curl -X POST \
+                                    -H 'Authorization: token YOUR_GITHUB_ACCESS_TOKEN' \
+                                    -H 'Content-Type: application/json' \
+                                    -d '{ "body": "${comment}" }' \
+                                    https://api.github.com/repos/joska99/groovy_test/issues/${prNumber}/comments
+                            """
+                        }
+                    }
+                }
             }
         }
         // TODO: Hotfix branch
@@ -90,7 +104,7 @@ pipeline {
                         try {
                             //! Using Helm from DockerTols (find custom tools)
                             sh '''
-                                helm upgrade $HELM_RELEASE $DOCKER_REGESTRY/$HELM_REPO \
+                                helm upgrade $HELM_RELEASE oci://$DOCKER_REGESTRY/$HELM_REPO \
                                     --kubeconfig $KUBECONFIG \
                                     --install \
                                     --atomic \
