@@ -90,7 +90,7 @@ pipeline {
                         try {
                             //! Using Helm from DockerTols (find custom tools)
                             sh '''
-                                helm upgrade $HELM_RELEASE $HELM_REPO \
+                                helm upgrade $HELM_RELEASE $DOCKER_REGESTRY/$HELM_REPO \
                                     --kubeconfig $KUBECONFIG \
                                     --install \
                                     --atomic \
