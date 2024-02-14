@@ -1,0 +1,92 @@
+# Deployment
+deployment:
+  name: app-deploy
+  namespace: default
+  # RS
+  replicas: 4
+  match_labels: nodejs-app
+  pod_label: nodejs-app
+  # Deploy strategy
+  strategy_type: RollingUpdate
+  max_surge: 1
+  max_unavailable: 1
+  # Container
+  container_image: joska99/weather-app:eks-no
+  container_port: 5000
+  request_cpu: 200m
+  limit_memory: "128Mi"
+  limit_cpu: "500m"
+  # Deployment configs
+  pull_policy: Always
+  cm_name: cm-green
+  # deployment_secret: ecr
+
+# Service
+service:
+  name: app-service
+  type: NodePort
+  selector: nodejs-app
+  port: 5000
+  targetPort: 5000
+  nodePort: 32000
+
+cm:
+  name: cm
+  BG_COLOR: blue
+
+cm2:
+  name: cm-green
+  BG_COLOR: green
+
+pvc:
+  name: efs-claim-1
+  access_mode: ReadWriteMany
+  sc_name: efs-sc
+  storage: "5Gi"
+
+sc: 
+  name: efs-sc
+  provisioner: efs.csi.aws.com
+  param_mode: efs-ap
+  param_fs_id: fs-06063eda3cd63d13c
+  param_perms: "700"
+
+#* Solitaire App Deployment
+
+# Deployment
+soliDeployment:
+  name: soli-app-deploy
+  namespace: default
+  # RS
+  replicas: 1
+  match_labels: soli-app
+  pod_label: soli-app
+  # Deploy strategy
+  strategy_type: RollingUpdate
+  max_surge: 1
+  max_unavailable: 1
+  # Container
+  container_image: chimenesjr/solitaire:nginx
+  container_port: 80
+  request_cpu: 200m
+  limit_memory: "128Mi"
+  limit_cpu: "500m"
+  # Deployment configs
+  pull_policy: Always
+
+# Service
+soliService:
+  name: soli-service
+  type: NodePort
+  selector: soli-app
+  port: 80
+  targetPort: 80
+  nodePort: 32001
+
+#* Ingress
+ingress: 
+  name: app-ingress
+  class: nginx
+  type: Prefix
+  weather_path: /
+  soli_path: /solitaire
