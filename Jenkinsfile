@@ -12,7 +12,7 @@ pipeline {
         // Docker
         IMG_NAME = 'weather-app'
         // TODO: Get version from file
-        // VERSION = sh(script: 'cat version.txt', returnStdout: true).trim() ?: '1.0.0'
+        //* VERSION = sh(script: 'cat version.txt', returnStdout: true).trim() ?: '1.0.0'
         VERSION = "${BUILD_NUMBER}"
         DOCKER_REGESTRY = 'joska99'
         DOCKER_PATH = './jenkins_project/py_app/'
@@ -54,7 +54,6 @@ pipeline {
                     ]) {
                         try {
                             sh '''
-                                echo "$VERSION"
                                 echo "$PSWD" | sudo docker login --username "$USER" --password-stdin
                                 sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
                             '''
@@ -99,6 +98,7 @@ pipeline {
                             echo '<--------- ERROR DEPLOY HELM CHART --------->'
                             echo "Failed: ${err}"
                             slackSend color: '#ff0000', message: "Error message: ${err}"
+                            error "Failed to deploy Helm chart: ${err}"
                         }
                     }
                 }
