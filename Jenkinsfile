@@ -36,6 +36,7 @@ pipeline {
                     try {
                         //! Using Docker from Tools
                         sh '''
+                            echo "$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
                             docker build -t "$DOCKER_REGESTRY/$IMG_NAME:$VERSION" "$DOCKER_PATH"
                         '''
                     } catch (err) {
