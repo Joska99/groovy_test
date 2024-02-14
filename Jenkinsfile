@@ -12,7 +12,7 @@ pipeline {
         // Docker
         IMG_NAME = 'weather-app'
         // TODO: Get version from file
-        VERSION = sh(script: "cat version.txt", returnStdout: true).trim()
+        // VERSION = sh(script: "cat version.txt", returnStdout: true).trim()
         // VERSION = "${BUILD_NUMBER}"
         DOCKER_REGESTRY = 'joska99'
         DOCKER_PATH = './jenkins_project/py_app/'
@@ -33,8 +33,9 @@ pipeline {
                 branch 'dev'
             }
             steps {
-
+                script {
                     //! Increment version from local file
+                    VERSION = sh(script: "cat version.txt", returnStdout: true).trim()
                     versionArray = env.VERSION.tokenize('.')
                     major = versionArray[0] as int
                     minor = versionArray[1] as int
@@ -49,7 +50,7 @@ pipeline {
                     sh "echo $patch"
                     sh "echo VERSION_IS:$VERSION"
                     sh 'printenv'
-
+                }
                 script {
                     //! TRY+CATCH gets error and continues pipeline
                     try {
