@@ -33,7 +33,7 @@ pipeline {
                 branch 'dev'
             }
             steps {
-                script {
+
                     //! Increment version from local file
                     versionArray = env.VERSION.tokenize('.')
                     major = versionArray[0] as int
@@ -49,7 +49,7 @@ pipeline {
                     sh "echo $patch"
                     sh "echo VERSION_IS:$VERSION"
                     sh 'printenv'
-                }
+
                 script {
                     //! TRY+CATCH gets error and continues pipeline
                     try {
