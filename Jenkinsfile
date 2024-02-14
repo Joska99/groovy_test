@@ -84,26 +84,22 @@ pipeline {
             }
             steps {
                 script {
-                    //! Increment version from local file
                     versionArray = VERSION.tokenize('.')
                     major = versionArray[0] as int
                     minor = versionArray[1] as int
                     patch = versionArray[2] as int
                     patch++
                     env.NEW_VERSION = "$major.$minor.$patch"
-                    //! Write updated version to file
                     sh "echo $NEW_VERSION > version.txt"
                 }
                 script {
-                    //! TRY+CATCH gets error and continues pipeline
                     try {
-                        //! Using Docker from Tools
                         sh '''
                             docker build -t "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION" "$DOCKER_PATH"
                         '''
                     } catch (err) {
                         echo '<--------- ERROR IN BUILD TO DOCKER IMAGE --------->'
-                        slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
+                        slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err.getMessage()}"
                         error "Failed to build Docker image: ${err.getMessage()}"
                     }
                 }
@@ -122,7 +118,7 @@ pipeline {
                             '''
                         } catch(err) {
                             echo '<--------- ERROR IN PUSH TO DOCKER HUB --------->'
-                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
+                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err.getMessage()}"
                             error "Failed to push Docker image: ${err.getMessage()}"
                         }
                     }
@@ -152,7 +148,7 @@ pipeline {
                             '''
                         } catch(err) {
                             echo '<--------- ERROR DEPLOY HELM CHART --------->'
-                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
+                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err.getStackTrace()}"
                             error "Failed to deploy Helm chart: ${err.getMessage()}"
                         }
                     }
