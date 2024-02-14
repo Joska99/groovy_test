@@ -11,9 +11,8 @@ pipeline {
     environment  {
         // Docker
         IMG_NAME = 'weather-app'
-        // TODO: Get version from file
-        VERSION = sh(script: "cat version.txt", returnStdout: true).trim()
-        // VERSION = "${BUILD_NUMBER}"
+        //! Get version from file
+        VERSION = sh(script: 'cat version.txt', returnStdout: true).trim()
         DOCKER_REGESTRY = 'joska99'
         DOCKER_PATH = './jenkins_project/py_app/'
         // Helm
@@ -43,9 +42,6 @@ pipeline {
                     env.NEW_VERSION = "$major.$minor.$patch"
                     //! Write updated version to file
                     sh "echo $NEW_VERSION > version.txt"
-                    sh "cat version.txt"
-                    sh "echo VERSION_IS:$NEW_VERSION"
-                    sh 'printenv'
                 }
                 script {
                     //! TRY+CATCH gets error and continues pipeline
@@ -71,7 +67,7 @@ pipeline {
                         try {
                             sh '''
                                 echo "$PSWD" | sudo docker login --username "$USER" --password-stdin
-                                sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
+                                sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION"
                             '''
                         } catch(err) {
                             echo '<--------- ERROR IN PUSH TO DOCKER HUB --------->'
