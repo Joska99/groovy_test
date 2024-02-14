@@ -17,7 +17,6 @@ pipeline {
         DOCKER_REGESTRY = 'joska99'
         DOCKER_PATH = './jenkins_project/py_app/'
         // Helm
-        HELM_PACKAGE = ''
         HELM_REPO = 'weather-app-chart'
         HELM_RELEASE = 'app'
     }
@@ -33,15 +32,16 @@ pipeline {
             }
             steps {
                 script {
+                    //! TRY+CATCH gets error and continues pipeline
                     try {
                         //! Using Docker from Tools
                         sh '''
                             docker build -t "$DOCKER_REGESTRY/$IMG_NAME:$VERSION" "$DOCKER_PATH"
                         '''
                     } catch (err) {
+                        echo '<--------- ERROR IN BUILD TO DOCKER IMAGE --------->'
                         echo "Failed: ${err}"
-                        echo 'ERROR IN BUILD TO DOCKER IMAGE'
-                        // TODO: notify slack with correct error
+                        slackSend color: '#ff0000', message: "Error message: ${err}"
                     }
                 }
                 script {
@@ -58,8 +58,9 @@ pipeline {
                                 sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
                             '''
                         } catch(err) {
+                            echo '<--------- ERROR IN PUSH TO DOCKER HUB --------->'
                             echo "Failed: ${err}"
-                            echo 'ERROR IN PUSH TO DOCKER HUB'
+                            slackSend color: '#ff0000', message: "Error message: ${err}"
                         }
                     }
                 }
@@ -92,7 +93,7 @@ pipeline {
                             '''
                         } catch(err) {
                             echo "Failed: ${err}"
-                            // TODO: notify slack with correct error nuuuu
+                            slackSend color: '#ff0000', message: "Error message: ${err}"
                         }
                     }
                 }
