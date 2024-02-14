@@ -13,7 +13,7 @@ pipeline {
         IMG_NAME = 'weather-app'
         // TODO: Get version from file
         // VERSION = sh(script: 'cat version.txt', returnStdout: true).trim() ?: '1.0.0'
-        VERSION = 'jenkins'
+        VERSION = sh(script: 'echo $env.BUILD_NMBER', returnStdout: true)
         DOCKER_REGESTRY = 'joska99'
         DOCKER_PATH = './jenkins_project/py_app/'
         // Helm
@@ -80,7 +80,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([
-                        file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
+                        file(
+                            credentialsId: 'kubeconfig', 
+                            variable: 'KUBECONFIG'
+                        )
                     ]) {
                         try {
                             //! Using Helm from DockerTols (find custom tools)
@@ -92,6 +95,7 @@ pipeline {
                                     --set value.deployment.image="$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
                             '''
                         } catch(err) {
+                            echo '<--------- ERROR DEPLOY HELM CHART --------->'
                             echo "Failed: ${err}"
                             slackSend color: '#ff0000', message: "Error message: ${err}"
                         }
