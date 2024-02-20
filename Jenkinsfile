@@ -44,16 +44,15 @@ pipeline {
                     sh "echo $NEW_VERSION > version.txt"
                 }
                 script {
-                    //! TRY+CATCH gets error 
+                    //! TRY+CATCH gets error
                     try {
                         //! Using Docker from Tools
                         sh '''
                             docker build -t "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION" "$DOCKER_PATH"
                         '''
                     } catch (err) {
-                        echo '<--------- ERROR IN BUILD TO DOCKER IMAGE --------->'
-                        slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
-                        error "Failed to build Docker image: ${err.getMessage()}"
+                        slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err.message}"
+                        error "Failed to build Docker image: ${err.message()}"
                     }
                 }
                 script {
@@ -70,9 +69,8 @@ pipeline {
                                 sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION"
                             '''
                         } catch(err) {
-                            echo '<--------- ERROR IN PUSH TO DOCKER HUB --------->'
-                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err}"
-                            error "Failed to push Docker image: ${err.getMessage()}"
+                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err.message()}"
+                            error "Failed to push Docker image: ${err.message()}"
                         }
                     }
                 }
@@ -98,9 +96,8 @@ pipeline {
                             docker build -t "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION" "$DOCKER_PATH"
                         '''
                     } catch (err) {
-                        echo '<--------- ERROR IN BUILD TO DOCKER IMAGE --------->'
-                        slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err.getMessage()}"
-                        error "Failed to build Docker image: ${err.getMessage()}"
+                        slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err.message()}"
+                        error "Failed to build Docker image: ${err.message()}"
                     }
                 }
                 script {
@@ -117,9 +114,8 @@ pipeline {
                                 sudo docker push "$DOCKER_REGESTRY/$IMG_NAME:$NEW_VERSION"
                             '''
                         } catch(err) {
-                            echo '<--------- ERROR IN PUSH TO DOCKER HUB --------->'
-                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err.getMessage()}"
-                            error "Failed to push Docker image: ${err.getMessage()}"
+                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err.message()}"
+                            error "Failed to push Docker image: ${err.message()}"
                         }
                     }
                 }
@@ -139,6 +135,8 @@ pipeline {
                     ]) {
                         try {
                             //! Using Helm from DockerTols (find custom tools)
+                            // RECHECK env values if saved from dev or hotfix runs
+                            sh 'printenv'
                             sh '''
                                 helm upgrade $HELM_RELEASE oci://docker.io/$DOCKER_REGESTRY/$HELM_REPO \
                                     --kubeconfig $KUBECONFIG \
@@ -147,9 +145,8 @@ pipeline {
                                     --set value.deployment.container_image="$DOCKER_REGESTRY/$IMG_NAME:$VERSION"
                             '''
                         } catch(err) {
-                            echo '<--------- ERROR DEPLOY HELM CHART --------->'
-                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err.getStackTrace()}"
-                            error "Failed to deploy Helm chart: ${err.getMessage()}"
+                            slackSend color: "${ERROR_MESSAGE}", message: "Error message: ${err.stackTrace()}"
+                            error "Failed to deploy Helm chart: ${err.message()}"
                         }
                     }
                 }
